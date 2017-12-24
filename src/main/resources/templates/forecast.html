@@ -1,0 +1,323 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<link rel="stylesheet" th:href="@{/css/weatherdefault.css}" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<script src="https://code.jquery.com/jquery-2.2.4.js"></script>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<head>
+<style type="text/css">
+body {
+	background: url("../images/weatherHome.jpg");
+	background-size: cover;
+}
+
+#content {
+	position: relative;
+}
+
+#content img {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+}
+
+#content p {
+	position: absolute;
+	top: 42px;
+	right: 10px;
+	color: rgba(41, 44, 42, 0.79);
+	font-weight: bold;
+	right: 10px;
+}
+
+ul {
+	display: table;
+	margin: 0 auto;
+}
+
+li {
+	color: green;
+	font-weight: bold;
+}
+
+#myDiv {
+	background-color: rgba(211, 211, 211, 0.34);
+	width: 403px;
+	border: 1px solid rgba(35, 32, 225, 0.53);
+	padding: 13px;
+	margin: 0 auto;
+	height: 75px;
+}
+
+.table>thead>tr>th {
+	border-bottom: none;
+}
+
+.exotic-table {
+	color: #fff;
+	background: #191919;
+	text-align: center;
+	border: none;
+}
+
+.exotic-table thead tr {
+	border: 2px #333 outset;
+	text-align: center;
+}
+
+.exotic-table thead>tr>th {
+	text-align: center;
+}
+
+.exotic-table tbody {
+	border: 2px outset #333;
+	border-top: none
+}
+
+.exotic-table tbody tr {
+	background: #222;
+}
+
+.exotic-table tbody tr:hover {
+	box-shadow: 0 0 20px #000;
+	background: #1a1a1a;
+}
+
+.exotic-table tbody tr td {
+	border-bottom: 2px outset #333;
+}
+
+.table-responsive {
+	border: none;
+}
+
+.popover {
+	color: #000
+}
+
+a.td-price {
+	color: #fff;
+	border-bottom: 1px dotted #ccc
+}
+
+.green {
+	color: #47e900
+}
+
+.red {
+	color: #f00808
+}
+
+.paleyellow {
+	color: #f8d97c
+}
+
+.purple {
+	color: #b461ff
+}
+
+.turquoise {
+	color: #52edff
+}
+
+#secondTb {
+	background-color: black;
+	border-color: white;
+}
+</style>
+</head>
+<body>
+	<div id="content" th:each="response : ${responses}">
+		<a th:href="@{'/weather/api/generateGraph'}"><img
+			th:src="@{${response.image}}" height="70px" width="68px" /></a>
+		<div></div>
+		<p>Graph</p>
+	</div>
+	<h2 align="center">Weather Forecast API</h2>
+	<p th:text="${message}" style="color: green;" align="center"></p>
+	<p th:text="${errorMessage}" style="color: red;" align="center"></p>
+	<!-- Trigger/Open The Modal -->
+	<!-- 	Note -->
+	<div id="myDiv" th:each="location : ${locations}">
+		<ul style="list-style-type: square">
+			<li th:text="${msg1}"></li>
+			<li th:text="${msg2}+''+${location.city}+')'">></li>
+		</ul>
+	</div>
+	<br />
+
+	<div class="container">
+		<!-- Trigger the modal with a button -->
+		<center>
+			<button type="button" class="btn btn-info btn-lg" data-toggle="modal"
+				data-target="#myModal" style="text-align: center;">View
+				Today's Weather</button>
+		</center>
+		<!-- Modal1 -->
+		<div class="modal fade" id="myModal" role="dialog">
+			<div class="modal-dialog modal-sm">
+				<div class="modal-content" style="width: 350;">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title" align="center">Search Today's Weather</h4>
+					</div>
+					<div class="modal-body">
+						<form class="form-inline" action="/weather/api/getWeather">
+							<div class="form-group">
+								<input type="text" class="form-control" id="city"
+									placeholder="Enter city name" name="location" />
+								<button type="submit" class="btn btn-primary">Search</button>
+							</div>
+						</form>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class='main'>
+		<table class="heavyTable">
+			<thead>
+				<tr th:each="response : ${responses}">
+					<th th:text="${response.header1}"></th>
+					<th th:text="${response.header2}"></th>
+					<th th:text="${response.header3}"></th>
+					<th th:text="${response.header4}"></th>
+					<th th:text="${response.header5}"></th>
+					<th th:text="${response.header6}"></th>
+					<th th:text="${response.header7}"></th>
+					<th>Notification</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="location : ${locations}">
+					<td th:text="${location.city}"></td>
+					<td th:text="${location.state}"></td>
+					<td th:text="${location.stateName}"></td>
+					<td th:text="${location.countryIso3166}"></td>
+					<td th:text="${location.latitude}"></td>
+					<td th:text="${location.longitude}"></td>
+					<td th:text="${location.elevation}"></td>
+					<td><img th:src="@{/images/emailIcon.jpg}" height="50px"
+						width="70px" id="myBtn1" data-toggle="modal"
+						data-target="#myModal1" /></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="container">
+		<div class="row">
+			<div class="table-responsive">
+				<table id="main-table" class="table exotic-table">
+					<thead>
+						<tr th:each="response : ${responses}" class="text-center">
+							<th id="secondTb">DataSet</th>
+							<th th:text="${response.header8}" id="secondTb"></th>
+							<th th:text="${response.header9}" id="secondTb"></th>
+							<th th:text="${response.header10}" id="secondTb"></th>
+							<th th:text="${response.header11}" id="secondTb"></th>
+							<th th:text="${response.header12}" id="secondTb"></th>
+							<th th:text="${response.header13}" id="secondTb"></th>
+							<th th:text="${response.header14}" id="secondTb"></th>
+							<th th:text="${response.header15}" id="secondTb"></th>
+							<th th:text="${response.header16}" id="secondTb"></th>
+							<th th:text="${response.header17}" id="secondTb"></th>
+							<th th:text="${response.header18}" id="secondTb"></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="weather : ${weathers}" class="text-center">
+							<td><span class="glyphicon glyphicon-ok green"></span></td>
+							<td th:text="${weather.timeZone}"></td>
+							<td th:text="${weather.weather}"></td>
+							<td th:text="${weather.temp}"></td>
+							<td th:text="${weather.temp_f}"></td>
+							<td th:text="${weather.temp_c}"></td>
+							<td th:text="${weather.humidity}"></td>
+							<td th:text="${weather.wind}"></td>
+							<td th:text="${weather.dewPoint}"></td>
+							<td th:text="${weather.searchDate}"></td>
+							<td th:text="${weather.time}"></td>
+							<td><a th:href="${weather.historyURL}">more..</a></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<script th:inline="javascript">
+			$(document).ready(function() {
+				$('[data-toggle="popover"]').popover({
+					title : "Payment Modes",
+					html : true,
+					placement : "left"
+				});
+			});
+		</script>
+	</div>
+
+	<div class="modal fade" id="myModal1" role="dialog">
+		<div class="modal-dialog modal-sm">
+			<div class="modal-content" style="width: 350;">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title" align="center">@Notification</h4>
+				</div>
+				<div class="modal-body">
+					<form class="form-inline" action="/weather/api/sendEmail">
+						<div class="form-group">
+							<input type="email" class="form-control" id="email"
+								placeholder="Enter Email id" name="email" />
+							<button type="submit" class="btn btn-primary">Send</button>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-warning" data-dismiss="modal">Cancel</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- <div class='main'>
+		<table class="heavyTable">
+			<thead>
+				<tr th:each="response : ${responses}">
+					<th th:text="${response.header8}"></th>
+					<th th:text="${response.header9}"></th>
+					<th th:text="${response.header10}"></th>
+					<th th:text="${response.header11}"></th>
+					<th th:text="${response.header12}"></th>
+					<th th:text="${response.header13}"></th>
+					<th th:text="${response.header14}"></th>
+					<th th:text="${response.header15}"></th>
+					<th th:text="${response.header16}"></th>
+					<th th:text="${response.header17}"></th>
+					<th th:text="${response.header18}"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="weather : ${weathers}">
+					<td th:text="${weather.timeZone}"></td>
+					<td th:text="${weather.weather}"></td>
+					<td th:text="${weather.temp}"></td>
+					<td th:text="${weather.temp_f}"></td>
+					<td th:text="${weather.temp_c}"></td>
+					<td th:text="${weather.humidity}"></td>
+					<td th:text="${weather.wind}"></td>
+					<td th:text="${weather.dewPoint}"></td>
+					<td th:text="${weather.searchDate}"></td>
+					<td th:text="${weather.time}"></td>
+					<td><a th:href="${weather.historyURL}">more..</a></td>
+				</tr>
+			</tbody>
+		</table>
+	</div> -->
+</body>
+</html>
